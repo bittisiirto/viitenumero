@@ -7,37 +7,33 @@ module Viitenumero
     attr_reader :number
 
     def initialize(s)
-      @number = format(s)
+      if FIViite.valid?(s)
+        @number = FIViite.new(s)
+      elsif RFViite.valid?(s)
+        @number = RFViite.new(s)
+      else
+        @number = FIViite.new(s)
+      end
+    end
+
+    def rf
+      number.is_a?(RFViite) ? number : number.to_rf
+    end
+
+    def fi
+      number.is_a?(FIViite) ? number : number.to_fi
     end
 
     def paper_format
-      number.gsub(/.{5}(?=.)/, '\0 ')
+      number.paper_format
     end
 
     def machine_format
-      number
+      number.machine_format
     end
 
     def valid?
-      valid_format? and valid_length? and valid_checksum?
-    end
-
-    def self.generate(base)
-      base = (base || '').to_s.gsub(/\s+/, '')
-      raise ArgumentError.new('must be a number') if base.match(/\A\d+\z/).nil?
-      raise ArgumentError.new('must be between 3-19 chars long') if base.length < 3 || base.length > 19
-
-      Viite.new(base + checksum(base))
-    end
-
-    def self.random(opts={})
-      opts.symbolize_keys!
-      length = opts.fetch(:length, 4)
-      raise ArgumentError if length < 4 || length > 20
-      base = ''
-      base_length = length - 1
-      base = rand(10**base_length).to_s while base.length != base_length
-      generate(base.to_s)
+      number.valid?
     end
 
     def self.valid?(s)
@@ -46,37 +42,6 @@ module Viitenumero
 
     def to_s
       machine_format
-    end
-
-    private
-
-    def format(s)
-      r = (s || '').to_s.gsub(/\s+/, '')
-      r.slice!(0) while r[0] == '0'
-      r
-    end
-
-    def valid_format?
-      !number.match(/\A\d+\z/).nil?
-    end
-
-    def valid_length?
-      number.length >= 4 && number.length <= 20
-    end
-
-    def valid_checksum?
-      last_digit = number[-1, 1]
-      last_digit == self.class.checksum(number[0..-2])
-    end
-
-    def self.checksum(base)
-      weights = [7, 3, 1]
-      checksum, current_weight = 0, 0
-      base.split('').reverse.each do |digit|
-        checksum += digit.to_i * weights[current_weight % 3]
-        current_weight += 1
-      end
-      ((10 - checksum % 10) % 10).to_s
     end
   end
 end

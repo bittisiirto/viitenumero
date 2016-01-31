@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ViiteTest < Minitest::Test
+class FIViiteTest < Minitest::Test
   def test_basic_cases
     [
       '1313',
@@ -12,7 +12,7 @@ class ViiteTest < Minitest::Test
       '917192622959197870',
       '200 30094 31000 74836'
     ].each do |rf|
-      assert Viite.new(rf).valid?
+      assert FIViite.new(rf).valid?
     end
 
     [
@@ -28,31 +28,31 @@ class ViiteTest < Minitest::Test
       '11111 11111 11111 11111 1',
       '11111 11111 11111 11111'
     ].each do |rf|
-      assert !Viite.new(rf).valid?
+      assert !FIViite.new(rf).valid?
     end
   end
 
   def test_formatting
-    assert_equal '917192622959197870', Viite.new('917192622959197870').machine_format
-    assert_equal '91719 26229 59197 870', Viite.new('917192622959197870').paper_format
+    assert_equal '917192622959197870', FIViite.new('917192622959197870').machine_format
+    assert_equal '91719 26229 59197 870', FIViite.new('917192622959197870').paper_format
   end
 
   def test_to_s_defaults_to_machine_format
-    assert_equal '917192622959197870', Viite.new('917192622959197870').to_s
+    assert_equal '917192622959197870', FIViite.new('917192622959197870').to_s
   end
 
   def test_generate
-    assert_equal '1009', Viite.generate('100').to_s
-    assert_raises(ArgumentError) { Viite.generate(nil) }
-    assert_raises(ArgumentError) { Viite.generate('') }
-    assert_raises(ArgumentError) { Viite.generate('ABC') }
-    assert_raises(ArgumentError) { Viite.generate('11') }
-    assert_raises(ArgumentError) { Viite.generate('11111 11111 11111 11111') }
+    assert_equal '1009', FIViite.generate('100').to_s
+    assert_raises(ArgumentError) { FIViite.generate(nil) }
+    assert_raises(ArgumentError) { FIViite.generate('') }
+    assert_raises(ArgumentError) { FIViite.generate('ABC') }
+    assert_raises(ArgumentError) { FIViite.generate('11') }
+    assert_raises(ArgumentError) { FIViite.generate('11111 11111 11111 11111') }
   end
 
   def test_random
     1000.times do
-      assert_equal 4, Viite.random(length: 4).to_s.length
+      assert_equal 4, FIViite.random(length: 4).to_s.length
     end
   end
 
@@ -92,7 +92,7 @@ class ViiteTest < Minitest::Test
     ]
 
     tests.each do |test|
-      assert_equal test[1], Viite.generate(test[0]).paper_format
+      assert_equal test[1], FIViite.generate(test[0]).paper_format
     end
   end
 end

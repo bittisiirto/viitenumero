@@ -27,15 +27,20 @@ viite = Viite.new('75310116600498132890')
 viite.valid?
  => true
 
+viite.fi.to_s
+ => "75310116600498132890"
+
 viite.paper_format
  => "75310 11660 04981 32890"
 
-Viite.random(length: 10)
+FIViite.random(length: 10).to_s
  => "3084950403"
 
 laskun_numero = 1000
-Viite.generate(laskun_numero)
+FIViite.generate(laskun_numero).to_s
  => "10003"
+RFViite.generate(laskun_numero).to_s
+ => "RF6810003"
 
 class Bill < ActiveRecord
   validates :reference_number, viite: true
