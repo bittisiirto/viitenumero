@@ -22,6 +22,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "minitest"
 
-  spec.add_runtime_dependency "activemodel", "~> 4.2.5"
-  spec.add_runtime_dependency "activesupport", "~> 4.2.5"
+  spec.add_runtime_dependency "activemodel", ">= 4.0.0", "< 6.0.0"
+  spec.add_runtime_dependency "activesupport", ">= 4.0.0", "< 6.0.0"
 end
